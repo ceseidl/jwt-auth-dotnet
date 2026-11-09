@@ -1,0 +1,14 @@
+TrustRoleFromClient=True: register
+{
+  "id": "c8b76ae9-baf4-4be7-867c-6e3a5561da53",
+  "email": "eve@shop.test",
+  "role": "admin"
+}
+  GET /admin/report: 200
+TrustRoleFromClient=False: register
+{
+  "id": "0c8bd676-7512-47b5-932a-643ff0d72e0b",
+  "email": "eve@shop.test",
+  "role": "user"
+}
+  GET /admin/report: 403

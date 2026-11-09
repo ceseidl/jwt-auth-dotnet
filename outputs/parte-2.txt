@@ -1,0 +1,15 @@
+no Authorization header: 401
+  Bearer
+garbage token: 401
+  Bearer error="invalid_token"
+payload edited to admin: 401
+  Bearer error="invalid_token"
+  error_description="The signature key was not found"
+token for another audience: 401
+  Bearer error="invalid_token"
+  error_description="The audience '(null)' is invalid"
+  (aud inside the token: other-api)
+expired 60 s ago (skew 30 s): 401
+  Bearer error="invalid_token"
+  error_description="The token expired at '<date>'"
+same token, default skew (5 min): 200

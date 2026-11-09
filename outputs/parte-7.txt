@@ -1,0 +1,6 @@
+without the dummy hash (the bug):
+  existing email, wrong password: median 62.4 ms
+  email that does not exist     : median 0.7 ms
+with the dummy hash:
+  existing email, wrong password: median 62.4 ms
+  email that does not exist     : median 62.6 ms

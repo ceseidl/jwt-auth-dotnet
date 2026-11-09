@@ -1,0 +1,8 @@
+refresh with R1: 200, R2 != R1: True
+refresh with R1 again: 401
+refresh with R2 after the reuse: 401
+GET /me with the access token from R2: 200
+store (only hashes):
+  R1: 0E74AB8C9521AFB6...  used=True revoked=True
+  R2: 4F43C1ECF079BA45...  used=False revoked=True
+R1 itself in the store: False

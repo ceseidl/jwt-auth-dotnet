@@ -1,0 +1,64 @@
+=== part 1 ===
+register: 201 {"id":"bdcb984e-bb50-4879-8c54-81e3030af4dd","email":"ana@shop.test","role":"user"}
+login: access token 308 chars, expiresIn 300 s
+parts: header 36, payload 227, signature 43 chars
+header : {"alg":"HS256","typ":"JWT"}
+payload: {"aud":"shop-api","iss":"shop-auth","exp":1794184543,"iat":1794184243,"nbf":1794184243,"sub":"bdcb984e-bb50-4879-8c54-81e3030af4dd","email":"ana@shop.test","role":"user"}
+GET /me without token: 401
+GET /me with token: 200 {"id":"bdcb984e-bb50-4879-8c54-81e3030af4dd","email":"ana@shop.test","role":"user","isAdmin":false}
+
+=== part 2 ===
+no Authorization header: 401
+  Bearer
+garbage token: 401
+  Bearer error="invalid_token"
+payload edited to admin: 401
+  Bearer error="invalid_token"
+  error_description="The signature key was not found"
+token for another audience: 401
+  Bearer error="invalid_token"
+  error_description="The audience '(null)' is invalid"
+  (aud inside the token: other-api)
+expired 60 s ago (skew 30 s): 401
+  Bearer error="invalid_token"
+  error_description="The token expired at '<date>'"
+same token, default skew (5 min): 200
+
+=== part 3 ===
+GET /admin/report as user : 403
+GET /admin/report as admin: 200
+GET /admin/report no token: 401
+RoleClaimType = ClaimTypes.Role, admin: 403
+  /me: {"id":"68c4f5d5-b5af-4e09-8738-aef0e32ca413","email":"root@shop.test","role":"admin","isAdmin":false}
+
+=== part 4 ===
+refresh with R1: 200, R2 != R1: True
+refresh with R1 again: 401
+refresh with R2 after the reuse: 401
+GET /me with the access token from R2: 200
+store (only hashes):
+  R1: 4EA046411A8EA708...  used=True revoked=True
+  R2: E369746A09BCACC8...  used=False revoked=True
+R1 itself in the store: False
+
+=== part 5 ===
+TrustRoleFromClient=True: register {"id":"b02aeddb-8b69-40ab-80a8-7059af78f246","email":"eve@shop.test","role":"admin"}
+  GET /admin/report: 200
+TrustRoleFromClient=False: register {"id":"7836442b-1ef2-463a-a96a-f1d45441ef09","email":"eve@shop.test","role":"user"}
+  GET /admin/report: 403
+
+=== part 6 ===
+hash: 84 chars, format 0x01
+  prf 2 (2 = HMAC-SHA512), 100,000 iterations, salt 16 bytes
+same password twice: AQAAAAIAAYagAAAAEMfG...
+                     AQAAAAIAAYagAAAAEF1D...
+time per hash: 41.5 ms (avg of 20)
+
+=== part 7 ===
+without the dummy hash (the bug):
+  existing email, wrong password: median 63.4 ms
+  email that does not exist     : median 0.7 ms
+with the dummy hash:
+  existing email, wrong password: median 63.1 ms
+  email that does not exist     : median 63.2 ms
+

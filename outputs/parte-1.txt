@@ -1,0 +1,28 @@
+register: 201
+{
+  "id": "8d4fafb7-4c73-4b1e-9388-6f1ca0c50b6a",
+  "email": "ana@shop.test",
+  "role": "user"
+}
+login: access token 308 chars, expiresIn 300 s
+parts: header 36, payload 227, signature 43 chars
+header : {"alg":"HS256","typ":"JWT"}
+payload:
+{
+  "aud": "shop-api",
+  "iss": "shop-auth",
+  "exp": 1794184553,
+  "iat": 1794184253,
+  "nbf": 1794184253,
+  "sub": "8d4fafb7-4c73-4b1e-9388-6f1ca0c50b6a",
+  "email": "ana@shop.test",
+  "role": "user"
+}
+GET /me without token: 401
+GET /me with token: 200
+{
+  "id": "8d4fafb7-4c73-4b1e-9388-6f1ca0c50b6a",
+  "email": "ana@shop.test",
+  "role": "user",
+  "isAdmin": false
+}

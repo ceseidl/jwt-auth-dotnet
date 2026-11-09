@@ -1,0 +1,11 @@
+GET /admin/report as user : 403
+GET /admin/report as admin: 200
+GET /admin/report no token: 401
+RoleClaimType = ClaimTypes.Role, admin: 403
+  /me:
+  {
+    "id": "72b132a2-1b85-4873-ba3e-c14a856a7701",
+    "email": "root@shop.test",
+    "role": "admin",
+    "isAdmin": false
+  }
